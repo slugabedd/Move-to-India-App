@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>US-India Tax Residency & RNOR Optimizer</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            body { background-color: white; }
+            .print-break-inside-avoid { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen p-3 sm:p-4 md:p-8 flex flex-col">
+
+    <div class="max-w-3xl mx-auto flex-grow w-full">
+        <!-- Header (Hidden on Print) -->
+        <header class="mb-6 md:mb-8 text-center print:hidden">
+            <h1 class="text-2xl md:text-3xl font-bold text-indigo-900 mb-2">US to India Tax Residency Optimizer</h1>
+            <p class="text-slate-600 text-sm md:text-base px-2">Plan your move back to India, evaluate your Substantial Presence Test (SPT) status, and maximize your tax-free window.</p>
+        </header>
+
+        <!-- Privacy Notice (Hidden on Print) -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 md:p-4 mb-6 md:mb-8 rounded shadow-sm print:hidden">
+            <div class="flex">
+                <div class="flex-shrink-0 mt-0.5">
+                    <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944a11.954 11.954 0 007.834 3.055 1 1 0 01.508.865c0 5.485-2.222 10.37-6.074 13.061a1 1 0 01-1.127 0C7.275 16.234 5.053 11.35 5.053 5.864a1 1 0 01.508-.865z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-xs md:text-sm text-blue-700 font-medium">
+                        Privacy Assurance: All calculations run locally in your browser. None of your travel or financial data is saved or transmitted.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Form Section (Hidden on Print) -->
+        <div class="bg-white rounded-xl shadow-md p-4 md:p-8 mb-8 border border-slate-100 print:hidden">
+            <h2 class="text-lg md:text-xl font-semibold mb-5 text-slate-800 border-b pb-2">Your Relocation Profile</h2>
+            
+            <form id="tax-form" class="space-y-5 md:space-y-6" onsubmit="event.preventDefault();">
+                <!-- US Legal Status -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5" for="us-status">US Legal Status</label>
+                    <select id="us-status" class="w-full border border-slate-300 rounded-lg shadow-sm p-3 text-base md:text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                        <option value="citizen_gc">US Citizen or Green Card</option>
+                        <option value="f1_student">F-1 Student (within first 5 years)</option>
+                        <option value="work_visa">H-1B / L-1 / O-1 Visa</option>
+                    </select>
+                </div>
+
+                <!-- US Physical Presence (Mobile-Optimized Grid & Base Text) -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">US Physical Presence</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 sm:bg-transparent sm:p-0 sm:border-0">
+                            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="days-current">Current Year</label>
+                            <select id="days-current" class="w-full border border-slate-300 rounded-lg shadow-sm p-2.5 text-base sm:text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                                <option value="15">Less than 1 month (0 - 29 days)</option>
+                                <option value="60">1 to 3 months (30 - 89 days)</option>
+                                <option value="135" selected>3 to 6 months (90 - 179 days)</option>
+                                <option value="257">6 to 11 months (180 - 334 days)</option>
+                                <option value="350">11 to 12 months (335 - 365 days)</option>
+                            </select>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 sm:bg-transparent sm:p-0 sm:border-0">
+                            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="days-last">Last Year</label>
+                            <select id="days-last" class="w-full border border-slate-300 rounded-lg shadow-sm p-2.5 text-base sm:text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                                <option value="15">Less than 1 month (0 - 29 days)</option>
+                                <option value="60">1 to 3 months (30 - 89 days)</option>
+                                <option value="135">3 to 6 months (90 - 179 days)</option>
+                                <option value="257">6 to 11 months (180 - 334 days)</option>
+                                <option value="350" selected>11 to 12 months (335 - 365 days)</option>
+                            </select>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 sm:bg-transparent sm:p-0 sm:border-0">
+                            <label class="block text-xs font-medium text-slate-500 mb-1.5" for="days-two-ago">2 Years Ago</label>
+                            <select id="days-two-ago" class="w-full border border-slate-300 rounded-lg shadow-sm p-2.5 text-base sm:text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                                <option value="15">Less than 1 month (0 - 29 days)</option>
+                                <option value="60">1 to 3 months (30 - 89 days)</option>
+                                <option value="135">3 to 6 months (90 - 179 days)</option>
+                                <option value="257">6 to 11 months (180 - 334 days)</option>
+                                <option value="350" selected>11 to 12 months (335 - 365 days)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- India Travel History -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5" for="india-days">Total Time Visiting India (Past 7 Years)</label>
+                    <select id="india-days" class="w-full sm:w-1/2 border border-slate-300 rounded-lg shadow-sm p-3 text-base md:text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="50">Under 2 months (Vacation visits only)</option>
+                        <option value="200" selected>2 to 10 months (Occasional extended trips)</option>
+                        <option value="500">10 to 24 months (Frequent/Long stays)</option>
+                        <option value="800">Over 24 months (Lived/Spent significant time)</option>
+                    </select>
+                </div>
+
+                <!-- Planned Move Quarter -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5" for="move-quarter">Planned Quarter of Return (Calendar Year)</label>
+                    <select id="move-quarter" class="w-full sm:w-1/2 border border-slate-300 rounded-lg shadow-sm p-3 text-base md:text-sm focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="q1">Q1: January – March</option>
+                        <option value="q2">Q2: April – June</option>
+                        <option value="q3">Q3: July – September</option>
+                        <option value="q4" selected>Q4: October – December</option>
+                    </select>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">Tip: Returning in Q4 often keeps your Indian stay under 182 days (approx. 6 months) for that financial year, protecting foreign earnings.</p>
+                </div>
+
+                <!-- Historical Status Check -->
+                <div class="flex items-start pt-3 pb-2 border-t border-slate-50">
+                    <div class="flex items-center h-6">
+                        <input id="nri-check" type="checkbox" class="focus:ring-indigo-500 h-6 w-6 sm:h-5 sm:w-5 text-indigo-600 border-slate-300 rounded">
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="nri-check" class="font-medium text-slate-700 select-none">Long-Term NRI History Confirmation</label>
+                        <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Check if you were a Non-Resident Indian (NRI) for at least 9 out of the last 10 financial years.</p>
+                        <p class="text-[11px] sm:text-xs text-indigo-700 mt-1.5 bg-indigo-50/50 p-2 rounded-md inline-block border border-indigo-100">
+                            <em>Note: To qualify as an NRI in a single year, you generally must have spent < 182 days in India during that year (Apr 1 – Mar 31).</em>
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Calculate Button -->
+            <div class="mt-6 md:mt-8">
+                <button id="calc-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3.5 sm:py-3 px-4 rounded-lg shadow-md transition duration-200 text-lg sm:text-base">
+                    Calculate Residency & Tax Windows
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden by Default, a11y Polite) -->
+        <div id="results-section" class="hidden space-y-6 print:block" aria-live="polite">
+            
+            <!-- Print Header -->
+            <div class="hidden print:block border-b-2 border-slate-800 pb-4 mb-6">
+                <h1 class="text-2xl font-bold text-slate-800">Tax Residency & RNOR Optimization Report</h1>
+                <p class="text-slate-500 text-sm mt-1">Generated based on provided residency inputs.</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 print:hidden">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-800">Your Optimization Results</h2>
+                <button onclick="window.print()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-4 rounded-lg shadow-sm transition w-full sm:w-auto text-center">
+                    Save PDF / Print
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 print:gap-4 print-break-inside-avoid">
+                <!-- US Result Card -->
+                <div class="bg-white rounded-xl shadow-md p-5 md:p-6 border-t-4 border-indigo-500 border border-slate-100 print:shadow-none">
+                    <h3 class="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1.5">United States</h3>
+                    <div id="us-result" class="text-lg md:text-xl font-bold text-indigo-900 mb-2"></div>
+                    <p id="us-explanation" class="text-sm text-slate-600 leading-relaxed"></p>
+                    <div id="spt-warning" class="hidden mt-3 inline-block px-2.5 py-1.5 bg-amber-50 text-amber-800 text-xs font-semibold rounded-md border border-amber-200 w-full sm:w-auto">
+                        ⚠ Estimated Result: Based on median range values. Ensure exact days align.
+                    </div>
+                </div>
+
+                <!-- India Result Card -->
+                <div class="bg-white rounded-xl shadow-md p-5 md:p-6 border-t-4 border-emerald-500 border border-slate-100 print:shadow-none">
+                    <h3 class="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1.5">India RNOR Eligibility</h3>
+                    <div id="india-result" class="text-lg md:text-xl font-bold text-emerald-800 mb-2"></div>
+                    <p id="india-explanation" class="text-sm text-slate-600 leading-relaxed"></p>
+                </div>
+            </div>
+
+            <!-- Year-by-Year Financial Benefits Breakdown -->
+            <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8 border border-slate-100 print:shadow-none print:border-none print:p-0 print:mt-6">
+                <h3 class="text-base md:text-lg font-semibold text-slate-800 mb-4 flex items-center print:border-b print:pb-2">
+                    <svg class="w-5 h-5 mr-2 text-indigo-600 print:hidden flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4"/></svg>
+                    Year-by-Year Financial Benefits Breakdown
+                </h3>
+                
+                <div id="yearly-breakdown" class="space-y-4 print:space-y-6">
+                    <!-- Dynamic Content Injected Here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Section (Hidden on Print) -->
+        <div class="mt-8 mb-4 bg-indigo-50/50 border border-indigo-100 rounded-xl p-6 text-center print:hidden">
+            <h3 class="text-lg font-semibold text-indigo-900 mb-2">Help Us Improve!</h3>
+            <p class="text-sm text-slate-600 mb-4 max-w-lg mx-auto">This is an early prototype to help returning NRIs navigate complex tax transitions. We'd love to hear your thoughts, feature requests, or any confusing aspects of the tool.</p>
+            <a href="mailto:connect.w.sharma@gmail.com?subject=Tax%20App%20Feedback" class="inline-flex items-center justify-center bg-white hover:bg-indigo-50 text-indigo-600 font-semibold py-2.5 px-5 rounded-lg border border-indigo-200 shadow-sm transition duration-200 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Send Feedback via Email
+            </a>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Architecture & Event Listeners -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const calcBtn = document.getElementById('calc-btn');
+            const resultsSection = document.getElementById('results-section');
+            const inputs = document.querySelectorAll('select, input[type="checkbox"]');
+
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    resultsSection.classList.add('hidden');
+                });
+            });
+
+            calcBtn.addEventListener('click', calculateTaxResidency);
+
+            function calculateTaxResidency() {
+                const usStatus = document.getElementById('us-status').value;
+                const currentYearDays = parseInt(document.getElementById('days-current').value) || 0;
+                const lastYearDays = parseInt(document.getElementById('days-last').value) || 0;
+                const twoYearsAgoDays = parseInt(document.getElementById('days-two-ago').value) || 0;
+                const indiaDays7Years = parseInt(document.getElementById('india-days').value) || 0;
+                const isHistoricalNRI = document.getElementById('nri-check').checked;
+                const moveQuarter = document.getElementById('move-quarter').value;
+
+                const usResultEl = document.getElementById('us-result');
+                const usExplanationEl = document.getElementById('us-explanation');
+                const sptWarningEl = document.getElementById('spt-warning');
+                const indiaResultEl = document.getElementById('india-result');
+                const indiaExplanationEl = document.getElementById('india-explanation');
+                const yearlyBreakdownEl = document.getElementById('yearly-breakdown');
+
+                sptWarningEl.classList.add('hidden');
+
+                let usResidency = "";
+                let usExplanation = "";
+
+                if (usStatus === 'citizen_gc') {
+                    usResidency = "US Resident Alien";
+                    usExplanation = "As a US Citizen or Green Card holder, you remain taxable on global income regardless of physical presence until formal expatriation.";
+                } else if (usStatus === 'f1_student') {
+                    usResidency = "Non-Resident Alien (Exempt)";
+                    usExplanation = "Exempt from the Substantial Presence Test (SPT) during your first 5 calendar years as a student.";
+                } else if (usStatus === 'work_visa') {
+                    const weightedDays = currentYearDays + (lastYearDays * (1 / 3)) + (twoYearsAgoDays * (1 / 6));
+                    
+                    sptWarningEl.classList.remove('hidden');
+                    
+                    if (weightedDays >= 183) {
+                        usResidency = "US Resident Alien (Meeting SPT)";
+                        usExplanation = `Estimated weighted presence is ~${weightedDays.toFixed(0)} days. You likely meet the Substantial Presence Test (SPT) criteria for the US.`;
+                    } else {
+                        usResidency = "Non-Resident Alien (Failing SPT)";
+                        usExplanation = `Estimated weighted presence is ~${weightedDays.toFixed(0)} days. You likely do not meet the Substantial Presence Test (SPT) and are treated as a Non-Resident Alien.`;
+                    }
+                }
+
+                let indiaResidency = "";
+                let indiaExplanation = "";
+                let isEligibleRNOR = false;
+
+                if (isHistoricalNRI || indiaDays7Years <= 729) {
+                    isEligibleRNOR = true;
+                    indiaResidency = "Eligible for RNOR Status";
+                    indiaExplanation = "You qualify for Resident but Not Ordinarily Resident (RNOR) status. Your foreign-sourced income and overseas investments remain tax-free in India.";
+                } else {
+                    indiaResidency = "Resident and Ordinarily Resident (ROR)";
+                    indiaExplanation = "You do not meet the RNOR conditions. Your worldwide income will be fully taxable in India from day one.";
+                }
+
+                const usTaxYear1 = usStatus === 'citizen_gc' 
+                    ? "<span class='font-medium text-slate-800'>US Taxes (Citizen/GC):</span> Your worldwide income and global capital gains remain fully taxable in the US." 
+                    : `<span class='font-medium text-slate-800'>US Taxes (Visa/F1):</span> You will likely meet the <strong>Substantial Presence Test (SPT)</strong> for the time spent in the US, making you a Dual-Status alien for this tax year. 
+                      <ul class='list-disc list-inside mt-1.5 ml-1 space-y-1'>
+                        <li><strong>US Capital Gains:</strong> Gains realized <em>before</em> your move are fully taxable. Gains realized <em>after</em> your move are generally exempt.</li>
+                        <li><strong>Ordinary Income:</strong> US salary, interest, and rent earned during the year remain taxable.</li>
+                      </ul>`;
+                
+                const usTaxYear2 = usStatus === 'citizen_gc'
+                    ? "<span class='font-medium text-slate-800'>US Taxes (Citizen/GC):</span> Your worldwide income and global capital gains continue to be fully taxable in the US."
+                    : `<span class='font-medium text-slate-800'>US Taxes (Visa/F1):</span> Because you are living in India, you will fail the <strong>Substantial Presence Test (SPT)</strong> and be classified as a Non-Resident Alien (NRA).
+                      <ul class='list-disc list-inside mt-1.5 ml-1 space-y-1'>
+                        <li><strong>US Capital Gains:</strong> You enjoy a <strong>0% US tax rate</strong> on capital gains from selling US stocks or foreign assets.</li>
+                        <li><strong>Ordinary Income:</strong> US-sourced dividends and rental income remain taxable in the US via a flat withholding rate.</li>
+                      </ul>`;
+
+                const usTaxYear4 = usStatus === 'citizen_gc'
+                    ? "<span class='font-medium text-slate-800'>US Taxes:</span> Global taxation applies in both countries. You will need to claim Foreign Tax Credits (FTC) to avoid double taxation."
+                    : "<span class='font-medium text-slate-800'>US Taxes:</span> Only your US-sourced ordinary income (like dividends and rent) remains taxable in the US. You will claim Foreign Tax Credits in India for taxes paid to the US.";
+
+                let breakdownHTML = "";
+
+                if (isEligibleRNOR) {
+                    const indiaStatusYear1 = (moveQuarter === 'q4' || moveQuarter === 'q3')
+                        ? `Because you are moving back in ${moveQuarter.toUpperCase()}, your stay in India is kept under 182 days for the financial year, preserving your <strong>NRI status</strong>. Foreign-sourced ordinary income and capital gains are completely tax-free in India.`
+                        : `Because you return in ${moveQuarter.toUpperCase()}, you immediately trigger residency, granting you <strong>RNOR status</strong> for this year. Foreign bank interest, overseas rental income, and foreign capital gains remain entirely tax-free in India.`;
+
+                    breakdownHTML = `
+                        <div class="p-3 md:p-4 bg-emerald-50/70 border-l-4 border-emerald-500 rounded-r-lg print-break-inside-avoid print:bg-white print:border-slate-300 print:border">
+                            <h4 class="font-semibold text-emerald-900 mb-2 print:text-slate-900 text-sm md:text-base">Year 1 (The Year You Return In)</h4>
+                            <ul class="list-disc list-outside ml-4 text-xs md:text-sm text-slate-700 space-y-2">
+                                <li><span class="font-medium text-slate-800">India Taxes:</span> ${indiaStatusYear1}</li>
+                                <li>${usTaxYear1}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-3 md:p-4 bg-indigo-50/70 border-l-4 border-indigo-500 rounded-r-lg print-break-inside-avoid print:bg-white print:border-slate-300 print:border">
+                            <h4 class="font-semibold text-indigo-900 mb-2 print:text-slate-900 text-sm md:text-base">Year 2 (First Full Year in India)</h4>
+                            <ul class="list-disc list-outside ml-4 text-xs md:text-sm text-slate-700 space-y-2">
+                                <li><span class="font-medium text-slate-800">India Taxes:</span> You are fully established in <strong>RNOR status</strong>. Realizing capital gains from US brokerage accounts or foreign assets during this year is 100% tax-free in India. Foreign-sourced ordinary income is also exempt from Indian tax.</li>
+                                <li>${usTaxYear2}</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-3 md:p-4 bg-sky-50/70 border-l-4 border-sky-400 rounded-r-lg print-break-inside-avoid print:bg-white print:border-slate-300 print:border">
+                            <h4 class="font-semibold text-sky-900 mb-2 print:text-slate-900 text-sm md:text-base">Year 3 (Final RNOR Phase)</h4>
+                            <p class="text-xs md:text-sm text-slate-700 mb-2">Depending on your exact arrival date, your RNOR tax protection phases out towards the end of this period.</p>
+                            <ul class="list-disc list-outside ml-4 text-xs md:text-sm text-slate-700 space-y-2">
+                                <li><span class="font-medium text-slate-800">Action Plan:</span> All foreign passive income and capital gains must be restructured or realized before transitioning into full ROR status to maximize your tax shield.</li>
+                                <li>${usTaxYear2}</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-3 md:p-4 bg-slate-100 border-l-4 border-slate-400 rounded-r-lg print-break-inside-avoid print:bg-white print:border-slate-300 print:border">
+                            <h4 class="font-semibold text-slate-800 mb-2 print:text-slate-900 text-sm md:text-base">Year 4 and Beyond (ROR Status)</h4>
+                            <p class="text-xs md:text-sm text-slate-700 mb-2">Your RNOR window expires, converting you to Resident and Ordinarily Resident (ROR).</p>
+                            <ul class="list-disc list-outside ml-4 text-xs md:text-sm text-slate-700 space-y-2">
+                                <li><span class="font-medium text-slate-800">India Taxes:</span> All global capital gains, foreign ordinary income, bank interest, and global salaries become fully subject to Indian taxation.</li>
+                                <li>${usTaxYear4}</li>
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    breakdownHTML = `
+                        <div class="p-3 md:p-4 bg-rose-50/70 border-l-4 border-rose-500 rounded-r-lg print-break-inside-avoid print:bg-white print:border-slate-300 print:border">
+                            <h4 class="font-semibold text-rose-900 mb-2 print:text-slate-900 text-sm md:text-base">All Years (Immediate ROR Status)</h4>
+                            <p class="text-xs md:text-sm text-slate-700 mb-2">Because your historical presence in India classifies you as Resident and Ordinarily Resident (ROR) immediately upon return, you do not receive an RNOR tax-free window.</p>
+                            <ul class="list-disc list-outside ml-4 text-xs md:text-sm text-slate-700 space-y-2">
+                                <li><span class="font-medium text-slate-800">India Taxes:</span> All global capital gains and ordinary income (salary, interest, bonds, rent) will be subject to full taxation in India from day one.</li>
+                                <li>${usTaxYear2.replace('US Taxes (Visa/F1):', '<span class="font-medium text-slate-800">US Taxes:</span>')} You will likely need to claim Foreign Tax Credits to manage dual-taxation.</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                usResultEl.innerText = usResidency;
+                usExplanationEl.innerHTML = usExplanation;
+                indiaResultEl.innerText = indiaResidency;
+                indiaExplanationEl.innerText = indiaExplanation;
+                yearlyBreakdownEl.innerHTML = breakdownHTML;
+
+                resultsSection.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+            }
+        });
+    </script>
+</body>
+</html>
